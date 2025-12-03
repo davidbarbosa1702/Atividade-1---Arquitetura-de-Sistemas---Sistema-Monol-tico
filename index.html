@@ -1,0 +1,178 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sistema Odonto - Simples Monolito</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Sistema Odonto (Monolítico — sem BD)</h1>
+  </header>
+
+  <main class="wrap">
+    <!-- LOGIN -->
+    <section id="loginCard" class="card">
+      <h2>Login</h2>
+      <div class="muted">Use os usuários de demo: admin/admin123, dentista/dent123, secretaria/sec123</div>
+      <label>Usuário</label><input id="loginUser" />
+      <label>Senha</label><input id="loginPass" type="password" />
+      <div class="actions">
+        <button id="btnLogin">Entrar</button>
+        <button id="btnDemo" class="secondary">Entrar como demo</button>
+      </div>
+    </section>
+
+```
+<!-- APP -->
+<section id="app" class="hidden">
+  <nav class="menu">
+    <button data-view="dashboard">Dashboard</button>
+    <button data-view="patients">Pacientes</button>
+    <button data-view="records">Prontuário</button>
+    <button data-view="agenda">Agenda</button>
+    <button data-view="finance">Financeiro</button>
+    <button data-view="reports">Relatórios</button>
+    <button data-view="users">Usuários</button>
+    <div class="spacer"></div>
+    <div id="who" class="muted"></div>
+    <button id="btnLogout" class="danger">Sair</button>
+  </nav>
+
+  <div id="views">
+    <div id="dashboard" class="view card">
+      <h2>Dashboard</h2>
+      <div id="dashboardMetrics" class="grid"></div>
+    </div>
+
+    <!-- Patients -->
+    <div id="patients" class="view card hidden">
+      <h2>Cadastro de Pacientes</h2>
+      <form id="patientForm" class="form-inline">
+        <input id="p_name" placeholder="Nome" required />
+        <input id="p_phone" placeholder="Telefone" />
+        <input id="p_email" placeholder="E-mail" />
+        <input id="p_address" placeholder="Endereço" />
+        <input id="p_dob" type="date" />
+        <input id="p_cpf" placeholder="CPF" />
+        <input id="p_allergies" placeholder="Alergias" />
+        <textarea id="p_notes" placeholder="Observações"></textarea>
+        <div class="actions">
+          <button type="submit">Salvar</button>
+          <button type="button" id="btnClearPatient" class="secondary">Limpar</button>
+        </div>
+      </form>
+
+      <div class="controls">
+        <input id="searchPatient" placeholder="Buscar por nome / CPF / email" />
+        <button id="btnSearchPatient">Buscar</button>
+        <button id="btnExportPatients" class="secondary">Exportar CSV</button>
+      </div>
+
+      <div id="patientsList"></div>
+    </div>
+
+    <!-- Records (Prontuário) -->
+    <div id="records" class="view card hidden">
+      <h2>Prontuário Eletrônico</h2>
+      <div class="controls">
+        <select id="rec_patientSelect"></select>
+        <input id="rec_search" placeholder="Buscar no prontuário" />
+        <button id="btnSearchRecords">Buscar</button>
+      </div>
+
+      <div class="card">
+        <label>Anotação</label>
+        <textarea id="rec_text"></textarea>
+        <label>Anexar imagem (opcional)</label>
+        <input id="rec_file" type="file" accept="image/*,.pdf" />
+        <div class="actions">
+          <button id="btnAddRecord">Adicionar</button>
+        </div>
+      </div>
+
+      <div id="recordList"></div>
+    </div>
+
+    <!-- Agenda -->
+    <div id="agenda" class="view card hidden">
+      <h2>Agenda e Agendamentos</h2>
+      <form id="apptForm" class="form-inline">
+        <select id="appt_patient"></select>
+        <input id="appt_dentist" placeholder="Dentista (login)" />
+        <input id="appt_dt" type="datetime-local" />
+        <input id="appt_dur" type="number" placeholder="Duração (min)" value="30" />
+        <textarea id="appt_notes" placeholder="Observações"></textarea>
+        <div class="actions">
+          <button type="submit">Agendar</button>
+          <button type="button" id="btnClearAppt" class="secondary">Limpar</button>
+        </div>
+      </form>
+
+      <div class="controls">
+        <input id="agendaDate" type="date" />
+        <select id="agendaDentist"></select>
+        <button id="btnViewDay">Ver dia</button>
+        <button id="btnExportAppts" class="secondary">Exportar CSV</button>
+      </div>
+      <div id="agendaList"></div>
+    </div>
+
+    <!-- Finance -->
+    <div id="finance" class="view card hidden">
+      <h2>Financeiro</h2>
+      <form id="payForm" class="form-inline">
+        <select id="pay_appt"></select>
+        <input id="pay_amount" type="number" placeholder="Valor (R$)" />
+        <select id="pay_method"><option value="avista">À vista</option><option value="parcelado">Parcelado</option></select>
+        <div class="actions">
+          <button type="submit">Registrar pagamento</button>
+        </div>
+      </form>
+
+      <div id="paymentsList"></div>
+    </div>
+
+    <!-- Reports -->
+    <div id="reports" class="view card hidden">
+      <h2>Relatórios & Export</h2>
+      <div class="actions">
+        <button id="btnReportRevenue">Faturamento</button>
+        <button id="btnReportPatients">Pacientes atendidos</button>
+        <button id="btnExportAll" class="secondary">Exportar tudo CSV</button>
+      </div>
+      <div id="reportArea"></div>
+    </div>
+
+    <!-- Users / Audit -->
+    <div id="users" class="view card hidden">
+      <h2>Usuários & Auditoria (Admin)</h2>
+      <div id="usersArea"></div>
+      <div class="card">
+        <h3>Criar usuário</h3>
+        <input id="u_login" placeholder="Login" />
+        <input id="u_name" placeholder="Nome" />
+        <input id="u_pass" placeholder="Senha" type="password" />
+        <select id="u_role"><option value="admin">Administrador</option><option value="dentist">Dentista</option><option value="secretary">Secretária</option></select>
+        <div class="actions"><button id="btnCreateUser">Criar</button></div>
+      </div>
+
+      <h3>Logs (últimas 50 ações)</h3>
+      <div id="logsArea" class="mono"></div>
+    </div>
+  </div>
+</section>
+```
+
+  </main>
+
+  <footer class="muted center">Observação: lembretes são simulados — envio real exige servidor.</footer>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
