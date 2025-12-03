@@ -1,4 +1,4 @@
-/* app.js - Lógica principal (localStorage, hash, CRUD simples) */
+
 
 /* --------- UTILIDADES --------- */
 const STORAGE_KEY = 'so_monolito_v2';
@@ -449,3 +449,4 @@ if(q(id)) q(id).innerHTML = '<option value="">-- selecione --</option>' + pts;
 
 /* inicial refresh */
 setTimeout(()=>{ store = loadStore(); renderDashboard(); renderPatientSelects(); renderAgendaDentists(); renderPayments(); renderUsersArea(); }, 200);
+
